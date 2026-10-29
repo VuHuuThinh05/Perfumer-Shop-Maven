@@ -1,0 +1,17 @@
+# Java / Maven generated files
+target/
+*.class
+*.war
+*.log
+
+# IDE settings and platform files
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
