@@ -70,9 +70,6 @@ public class LoginServlet extends HttpServlet {
                 if (arr[i].getName().equals("cUName")) {
                     request.setAttribute("uName", arr[i].getValue());
                 }
-                if (arr[i].getName().equals("pUName")) {
-                    request.setAttribute("uPass", arr[i].getValue());
-                }
                 if (arr[i].getName().equals("reMem")) {
                     request.setAttribute("reMem", arr[i].getValue());
                 }
@@ -109,20 +106,21 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("wallet", wallet);
             session.setAttribute("account", user);
             Cookie u = new Cookie("cUName", uName);
-            Cookie p = new Cookie("pUName", uPass);
             Cookie r = new Cookie("reMem", remember);
             u.setMaxAge(60 * 60 * 24 * 30 * 3);
             if (remember != null) {
-                p.setMaxAge(60 * 60 * 24 * 30 * 3);
                 r.setMaxAge(60 * 60 * 24 * 30 * 3);
             } else {
-                p.setMaxAge(0);
                 r.setMaxAge(0);
             }
+            // Remove legacy cookies that stored plaintext passwords.
+            Cookie legacyPassword = new Cookie("pUName", "");
+            legacyPassword.setMaxAge(0);
+            legacyPassword.setPath(request.getContextPath().isEmpty() ? "/" : request.getContextPath());
 
             response.addCookie(u);
             response.addCookie(r);
-            response.addCookie(p);
+            response.addCookie(legacyPassword);
             String image = user.getImage();
 
             session.setAttribute("imageUser", image);
