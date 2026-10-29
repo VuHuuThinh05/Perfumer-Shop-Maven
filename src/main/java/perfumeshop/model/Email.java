@@ -24,8 +24,8 @@ import java.util.Properties;
  */
 public class Email {
 
-    private final String eFrom = "lvhhoangg1@gmail.com";
-    private final String ePass = "ojlx ohfr qxwd llxx";
+    private final String eFrom = System.getenv("SMTP_USERNAME");
+    private final String ePass = System.getenv("SMTP_PASSWORD");
 
     // 
     // check email
@@ -44,9 +44,10 @@ public class Email {
     }
 
     public void sendEmail(String subject, String messgage, String to) {
-        try {
-
-        } catch (Exception e) {
+        if (eFrom == null || eFrom.isEmpty() || ePass == null || ePass.isEmpty()) {
+            throw new IllegalStateException(
+                    "SMTP_USERNAME and SMTP_PASSWORD must be set before sending email."
+            );
         }
         // Properties
         Properties props = new Properties();
@@ -55,7 +56,7 @@ public class Email {
         props.put("mail.smtp.host", "smtp.gmail.com");
 
         // TLS 587 SSL 465
-        props.put("mail.smtp.port", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
 
         // dang nhap
         props.put("mail.smtp.auth", "true");
